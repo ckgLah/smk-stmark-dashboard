@@ -34,8 +34,14 @@
       margin-right: auto;
     }
     b { font-size: 18px; }
+    .phone { 
+      font-weight: bold; 
+      font-size: 22px; 
+      color: #000; 
+    }
     @media (max-width: 600px) {
       input, #result { font-size: 16px; }
+      .phone { font-size: 20px; }
     }
   </style>
 </head>
@@ -51,7 +57,7 @@
 let data = [];
 
 // Load CSV dari Sheet
-fetch("PASTE_LINK_CSV_PUBLISH_DI_SINI")
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRIHa_foG0zcZ1UqYxp-Ls_H8GHmeKHDTmrcpwU4u_eg_e8gY0PvHP4Cq7nmecRrCNf6GDP5IkgdYwI/pub?gid=0&single=true&output=csv")
   .then(response => response.text())
   .then(csvText => {
     const rows = csvText.split("\n");
@@ -70,10 +76,12 @@ function liveSearch() {
     resultDiv.innerHTML =
       "<b>Nama Murid:</b> " + match[0] + "<br>" +
       "<b>Kelas:</b> " + match[1] + "<br><br>" +
+
       "<b>Penjaga 1:</b> " + (match[2] || "-") + "<br>" +
-      "<b>No Telefon Penjaga 1:</b> " + (match[3] || "-") + "<br><br>" +
+      "<b>No Telefon Penjaga 1:</b> <span class='phone'>" + (match[3] || "-") + "</span><br><br>" +
+
       "<b>Penjaga 2:</b> " + (match[4] || "-") + "<br>" +
-      "<b>No Telefon Penjaga 2:</b> " + (match[5] || "-");
+      "<b>No Telefon Penjaga 2:</b> <span class='phone'>" + (match[5] || "-") + "</span>";
   } else {
     resultDiv.innerHTML = "<span style='color:red'>Tiada Rekod Dijumpai</span>";
   }
