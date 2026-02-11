@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Carian Penjaga - SMK St Mark</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input { padding: 10px; width: 80%; font-size: 16px; }
+    #result { margin-top: 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+
+<h2>Dashboard Carian Penjaga</h2>
+<h4>SMK St Mark Butterworth</h4>
+
+<input type="text" id="searchInput" placeholder="Taip Nama Murid" onkeyup="liveSearch()">
+<div id="result"></div>
+
+<script>
+let data = [];
+
+// Load CSV dari Sheet
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRIHa_foG0zcZ1UqYxp-Ls_H8GHmeKHDTmrcpwU4u_eg_e8gY0PvHP4Cq7nmecRrCNf6GDP5IkgdYwI/pub?gid=0&single=true&output=csv")
+  .then(response => response.text())
+  .then(csvText => {
+    const rows = csvText.split("\n");
+    data = rows.slice(1).map(r => r.split(","));
+  });
+
+function liveSearch() {
+  const input = document.getElementById("searchInput").value.trim().toLowerCase();
+  const resultDiv = document.getElementById("result");
+
+  if (input.length < 1) { resultDiv.innerHTML = ""; return; }
+
+  const match = data.find(r => r[0].toLowerCase().includes(input));
+
+  if (match) {
+    resultDiv.innerHTML =
+      "<b>Nama Murid:</b> " + match[0] + "<br>" +
+      "<b>Kelas:</b> " + match[1] + "<br><br>" +
+
+      "<b>Penjaga 1:</b> " + (match[2] || "-") + "<br>" +
+      "<b>No Telefon Penjaga 1:</b> " + (match[3] || "-") + "<br><br>" +
+
+      "<b>Penjaga 2:</b> " + (match[4] || "-") + "<br>" +
+      "<b>No Telefon Penjaga 2:</b> " + (match[5] || "-");
+  } else {
+    resultDiv.innerHTML = "<span style='color:red'>Tiada Rekod Dijumpai</span>";
+  }
+}
+</script>
+
+</body>
+</html>
